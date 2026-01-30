@@ -78,3 +78,13 @@ post {
   }
 }
 ```
+
+---
+
+## 📌 Summary
+
+This Jenkins Shared Library provides reusable steps for:
+- Secure Docker Hub login (`dockerLogin`)
+- Build failure and recovery email notifications (`emailNotifications`)
+
+Designed to keep Jenkinsfiles clean and maintainable.
