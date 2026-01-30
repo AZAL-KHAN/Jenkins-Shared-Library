@@ -1,44 +1,52 @@
 def call(String recipientEmail) {
 
-    return [
-        failure: {
-            steps.echo "📧 Sending FAILURE email to ${recipientEmail}"
+    def jobName  = env.JOB_NAME
+    def buildNo  = env.BUILD_NUMBER
+    def buildUrl = env.BUILD_URL ?: "http://localhost:8080/job/${jobName}/${buildNo}/"
 
-            steps.emailext(
-                subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-❌ BUILD FAILED
+    //  Failure notification
+    if (currentBuild.currentResult == 'FAILURE') {
 
-Job Name : ${env.JOB_NAME}
-Build No : ${env.BUILD_NUMBER}
+        echo "📧 Sending FAILURE email to ${recipientEmail}"
 
-🔗 Build URL:
-${env.BUILD_URL}
+        emailext(
+            subject: "Jenkins Build Failed: ${jobName} #${buildNo}",
+            body: """
+Jenkins build has failed 
 
-Please check the logs and take action.
-""",
-                to: recipientEmail
-            )
-        },
+Job Name : ${jobName}
+Build No : ${buildNo}
 
-        fixed: {
-            steps.echo "📧 Sending FIXED email to ${recipientEmail}"
-
-            steps.emailext(
-                subject: "✅ Jenkins Build Fixed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-✅ BUILD BACK TO NORMAL
-
-Job Name : ${env.JOB_NAME}
-Build No : ${env.BUILD_NUMBER}
+Please check the logs.
 
 🔗 Build URL:
-${env.BUILD_URL}
+${buildUrl}
 
-The pipeline is healthy again 🎉
 """,
-                to: recipientEmail
-            )
-        }
-    ]
+            to: recipientEmail
+        )
+    }
+
+    // ✅ Fixed notification (Failure → Success)
+    else if (currentBuild.previousBuild?.result == 'FAILURE'
+          && currentBuild.currentResult == 'SUCCESS') {
+
+        echo "📧 Sending FIXED email to ${recipientEmail}"
+
+        emailext(
+            subject: "✅ Jenkins Build Fixed: ${jobName} #${buildNo}",
+            body: """
+Jenkins build is back to normal 
+
+Job Name : ${jobName}
+Build No : ${buildNo}
+
+🔗 Build URL:
+${buildUrl}
+
+Pipeline is healthy again.
+""",
+            to: recipientEmail
+        )
+    }
 }
