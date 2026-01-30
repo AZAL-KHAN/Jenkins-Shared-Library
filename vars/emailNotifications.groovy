@@ -17,24 +17,23 @@ Jenkins build has failed
 Job Name : ${jobName}
 Build No : ${buildNo}
 
-Please check the logs.
-
 🔗 Build URL:
 ${buildUrl}
 
+Please check the logs.
 """,
             to: recipientEmail
         )
     }
 
-    // ✅ Fixed notification (Failure → Success)
+    //  Fixed notification (Failure → Success)
     else if (currentBuild.previousBuild?.result == 'FAILURE'
           && currentBuild.currentResult == 'SUCCESS') {
 
         echo "📧 Sending FIXED email to ${recipientEmail}"
 
         emailext(
-            subject: "✅ Jenkins Build Fixed: ${jobName} #${buildNo}",
+            subject: "Jenkins Build Fixed: ${jobName} #${buildNo}",
             body: """
 Jenkins build is back to normal 
 
