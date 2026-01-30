@@ -1,11 +1,8 @@
 # Docker Login – Jenkins Shared Library
 
-Reusable Jenkins Shared Library step to securely log in to Docker Hub
-using Jenkins credentials.
+Reusable Jenkins Shared Library step to securely log in to Docker Hub using Jenkins credentials.
 
----
-
-## 🚀 Usage
+## Usage
 
 Import the shared library in your Jenkinsfile:
 
@@ -13,33 +10,19 @@ Import the shared library in your Jenkinsfile:
 @Library('jenkins-shared-library') _
 ```
 
----
+Use the Docker login step inside a stage:
 
-Use the Docker login step inside a stage: 
-
-```groovy
+```
 stage('DockerHub Login') {
   steps {
     dockerLogin()
   }
 }
 ```
----
 
-## 🔐 Credentials
+Custom credentials ID
 
-Default credentials ID
-
-By default, this step uses the following Jenkins credentials ID:
-
-```
-dockerhub-creds
-```
-
-**Custom credentials ID**
-
-If your Docker Hub credentials are saved with a different ID, pass it
-as an argument:
+If your Docker Hub credentials are saved with a different ID, pass it as an argument:
 
 ```
 dockerLogin('my-dockerhub-creds')
