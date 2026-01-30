@@ -8,6 +8,17 @@ All shared functions are placed under:
 
 ---
 
+## 📁 Repository Structure
+```
+Jenkins-Shared-Library
+├── README.md
+└── vars
+    ├── dockerLogin.groovy
+    └── emailNotifications.groovy
+
+2 directories, 3 files
+```
+---
 ## 🔐 dockerLogin.groovy
 
 **Path:**
@@ -33,9 +44,14 @@ stage('DockerHub Login') {
   }
 }
 ```
-Custom credentials ID
+## Custom Credentials ID
 
-If your Docker Hub credentials use a different ID:
+By default, `dockerLogin()` uses the Jenkins credentials ID named:
+
+**dockerhub-creds**
+
+If your Docker Hub credentials are stored with a different ID, pass it as an argument:
+
 
 ```
 dockerLogin('my-dockerhub-creds')
